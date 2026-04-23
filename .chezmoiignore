@@ -1,0 +1,16 @@
+# Scripts — not deployed to $HOME, used by setup.sh directly
+setup.sh
+macos.sh
+folder-structure.sh
+enable-bitwarden-ssh-agent.sh
+save-ssh-to-bitwarden.sh
+ssh-config.example
+
+# Package list — used by setup.sh, not a dotfile
+Brewfile
+
+# Docs
+README.md
+
+# macOS junk
+.DS_Store
