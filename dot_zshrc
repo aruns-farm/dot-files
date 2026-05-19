@@ -83,6 +83,45 @@ alias gb="git branch"
 alias gco="git checkout"
 alias lg="lazygit"
 
+# ── Per-repo SSH override ────────────────────────────────────
+# Usage (inside a git repo):
+#   use ssh-personal   → route origin through 'github-personal' host alias
+#   use ssh-office     → route origin through 'github-office' host alias
+# Rewrites the origin URL AND pins core.sshCommand to honor ~/.ssh/config.
+use() {
+  local target="$1" alias_host
+  case "$target" in
+    ssh-personal) alias_host="github-personal" ;;
+    ssh-office)   alias_host="github-office" ;;
+    "")  echo "usage: use <ssh-personal|ssh-office>" >&2; return 1 ;;
+    *)   echo "use: unknown target '$target' (expected ssh-personal or ssh-office)" >&2; return 1 ;;
+  esac
+
+  if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    echo "use: not inside a git repo" >&2
+    return 1
+  fi
+
+  local origin new_origin
+  if ! origin=$(git remote get-url origin 2>/dev/null); then
+    echo "use: no 'origin' remote configured" >&2
+    return 1
+  fi
+
+  if [[ "$origin" == https://github.com/* ]]; then
+    new_origin="git@${alias_host}:${origin#https://github.com/}"
+  else
+    new_origin=$(print -r -- "$origin" | sed -E "s#(git@|ssh://git@)(github\.com|github-personal|github-office)#\1${alias_host}#")
+  fi
+
+  [[ "$origin" != "$new_origin" ]] && git remote set-url origin "$new_origin"
+  git config core.sshCommand "ssh -F $HOME/.ssh/config"
+
+  echo "✓ repo now using ${alias_host}"
+  echo "  origin:          $(git remote get-url origin)"
+  echo "  core.sshCommand: $(git config --get core.sshCommand)"
+}
+
 # ── Cloudflare ───────────────────────────────────────────────
 alias tunnel="cloudflared tunnel"
 alias trun="cloudflared tunnel run"

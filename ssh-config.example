@@ -1,15 +1,30 @@
 # Copy to ~/.ssh/config and: chmod 600 ~/.ssh/config
+# setup.sh writes this same config automatically — this file documents it.
 #
 # "github-office" / "github-personal" are aliases — they are NOT real hostnames.
 # They only work after this file exists (see: ssh -G github-office).
 #
-# With Bitwarden SSH agent, keys live in the vault; do not set IdentityFile to
-# ~/.ssh/... unless those files exist. Let the agent offer keys (SSH_AUTH_SOCK).
+# Private keys live in the Bitwarden SSH agent (SSH_AUTH_SOCK is set in
+# ~/.zshrc). IdentityFile points to the PUBLIC half (committed in this repo
+# under ssh/*.pub and copied to ~/.ssh/ by setup.sh) so ssh knows which
+# fingerprint to ask the agent for; IdentitiesOnly yes stops it from
+# offering every key the agent holds.
 
 Host github-office
   HostName github.com
   User git
+  IdentityFile ~/.ssh/office.pub
+  IdentitiesOnly yes
 
 Host github-personal
   HostName github.com
   User git
+  IdentityFile ~/.ssh/personal.pub
+  IdentitiesOnly yes
+
+# Default GitHub → personal
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/personal.pub
+  IdentitiesOnly yes
