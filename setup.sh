@@ -37,7 +37,7 @@ error()   { echo "${RED}❌  $1${NC}"; exit 1; }
 step()    { echo "\n${BOLD}━━━  $1  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"; }
 
 # ── Config — Edit these before running ───────────────────────
-DOTFILES_REPO=""        # e.g. git@github.com:arun/dotfiles.git
+DOTFILES_REPO="git@github.com:aruns-farm/dot-files.git"
 DOTFILES_DIR="$HOME/Documents/dot-files"
 NODE_VERSION="lts"
 BW_EMAIL="arun.vinland@gmail.com"
@@ -102,121 +102,121 @@ fi
 # ══════════════════════════════════════════════════════════════
 step "3 / 13  Bitwarden + SSH Keys"
 
-# # ── Bitwarden login ──────────────────────────────────────────
-# if ! command -v bw &>/dev/null; then
-#   error "Bitwarden CLI (bw) not found. Check Brewfile."
-# fi
-#
-# echo ""
-# info "Logging into Bitwarden..."
-# BW_STATUS=$(bw status 2>/dev/null | jq -r '.status' 2>/dev/null || echo "unauthenticated")
-#
-# if [[ "$BW_STATUS" == "unauthenticated" ]]; then
-#   bw login "$BW_EMAIL"
-# fi
-#
-# info "Unlocking Bitwarden vault..."
-# export BW_SESSION=$(bw unlock --raw)
-#
-# if [[ -z "$BW_SESSION" ]]; then
-#   error "Failed to unlock Bitwarden — check your master password."
-# fi
-# success "Bitwarden unlocked"
-#
-# # ── SSH Key setup — multiple keys (office + personal) ────────
-# mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
-#
-# KEYS_EXIST=0
-# [[ -f "$HOME/.ssh/office" ]] && [[ -f "$HOME/.ssh/personal" ]] && KEYS_EXIST=1
-#
-# if [[ $KEYS_EXIST -eq 1 ]]; then
-#   success "SSH keys already exist — skipping pull from Bitwarden"
-# else
-#   info "Pulling SSH keys from Bitwarden..."
-#
-#   # Pull office key
-#   OFFICE_KEY=$(bw get notes "$BW_SSH_OFFICE_KEY" --session "$BW_SESSION" 2>/dev/null)
-#   if [[ -n "$OFFICE_KEY" ]]; then
-#     echo "$OFFICE_KEY" > "$HOME/.ssh/office"
-#     chmod 600 "$HOME/.ssh/office"
-#     success "Office SSH key restored"
-#   else
-#     warn "Could not find '$BW_SSH_OFFICE_KEY' in Bitwarden"
-#   fi
-#
-#   # Pull personal key
-#   PERSONAL_KEY=$(bw get notes "$BW_SSH_PERSONAL_KEY" --session "$BW_SESSION" 2>/dev/null)
-#   if [[ -n "$PERSONAL_KEY" ]]; then
-#     echo "$PERSONAL_KEY" > "$HOME/.ssh/personal"
-#     chmod 600 "$HOME/.ssh/personal"
-#     success "Personal SSH key restored"
-#   else
-#     warn "Could not find '$BW_SSH_PERSONAL_KEY' in Bitwarden"
-#   fi
-#
-#   # Load keys into ssh-agent
-#   eval "$(ssh-agent -s)" &>/dev/null
-#   [[ -f "$HOME/.ssh/office" ]]   && ssh-add --apple-use-keychain "$HOME/.ssh/office" 2>/dev/null || true
-#   [[ -f "$HOME/.ssh/personal" ]] && ssh-add --apple-use-keychain "$HOME/.ssh/personal" 2>/dev/null || true
-#
-#   if [[ -z "$OFFICE_KEY" ]] || [[ -z "$PERSONAL_KEY" ]]; then
-#     echo ""
-#     warn "One or both SSH keys missing from Bitwarden."
-#     warn "Run on your current machine: zsh save-ssh-to-bitwarden.sh"
-#     warn "Then run setup.sh again on this new machine."
-#     read -r "?Press Enter to continue..."
-#   else
-#     success "SSH keys loaded into ssh-agent"
-#   fi
-# fi
-#
-# # ── Write SSH config ─────────────────────────────────────────
-# if [[ ! -f "$HOME/.ssh/config" ]]; then
-#   # Pull from Bitwarden if available
-#   SSH_CONFIG=$(bw get notes "$BW_SSH_CONFIG" --session "$BW_SESSION" 2>/dev/null)
-#
-#   if [[ -n "$SSH_CONFIG" ]]; then
-#     echo "$SSH_CONFIG" > "$HOME/.ssh/config"
-#     success "SSH config restored from Bitwarden"
-#   else
-#     # Write default config (matches your current setup)
-#     cat > "$HOME/.ssh/config" << 'EOF'
-# Host *
-#   AddKeysToAgent yes
-#   UseKeychain yes
-#
-# # Office GitHub account
-# Host github-office
-#   HostName github.com
-#   User git
-#   IdentityFile ~/.ssh/office
-#   IdentitiesOnly yes
-#
-# # Personal GitHub account
-# Host github-personal
-#   HostName github.com
-#   User git
-#   IdentityFile ~/.ssh/personal
-#   IdentitiesOnly yes
-#
-# Host github-personal.com
-#   HostName github.com
-#   User git
-#   IdentityFile ~/.ssh/personal
-#   IdentitiesOnly yes
-#
-# # Default GitHub (personal)
-# Host github.com
-#   HostName github.com
-#   User git
-#   IdentityFile ~/.ssh/personal
-#   IdentitiesOnly yes
-# EOF
-#     success "SSH config written with office + personal setup"
-#   fi
-#
-#   chmod 600 "$HOME/.ssh/config"
-# fi
+# ── Bitwarden login ──────────────────────────────────────────
+if ! command -v bw &>/dev/null; then
+  error "Bitwarden CLI (bw) not found. Check Brewfile."
+fi
+
+echo ""
+info "Logging into Bitwarden..."
+BW_STATUS=$(bw status 2>/dev/null | jq -r '.status' 2>/dev/null || echo "unauthenticated")
+
+if [[ "$BW_STATUS" == "unauthenticated" ]]; then
+  bw login "$BW_EMAIL"
+fi
+
+info "Unlocking Bitwarden vault..."
+export BW_SESSION=$(bw unlock --raw)
+
+if [[ -z "$BW_SESSION" ]]; then
+  error "Failed to unlock Bitwarden — check your master password."
+fi
+success "Bitwarden unlocked"
+
+# ── SSH Key setup — multiple keys (office + personal) ────────
+mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
+
+KEYS_EXIST=0
+[[ -f "$HOME/.ssh/office" ]] && [[ -f "$HOME/.ssh/personal" ]] && KEYS_EXIST=1
+
+if [[ $KEYS_EXIST -eq 1 ]]; then
+  success "SSH keys already exist — skipping pull from Bitwarden"
+else
+  info "Pulling SSH keys from Bitwarden..."
+
+  # Pull office key
+  OFFICE_KEY=$(bw get notes "$BW_SSH_OFFICE_KEY" --session "$BW_SESSION" 2>/dev/null)
+  if [[ -n "$OFFICE_KEY" ]]; then
+    echo "$OFFICE_KEY" > "$HOME/.ssh/office"
+    chmod 600 "$HOME/.ssh/office"
+    success "Office SSH key restored"
+  else
+    warn "Could not find '$BW_SSH_OFFICE_KEY' in Bitwarden"
+  fi
+
+  # Pull personal key
+  PERSONAL_KEY=$(bw get notes "$BW_SSH_PERSONAL_KEY" --session "$BW_SESSION" 2>/dev/null)
+  if [[ -n "$PERSONAL_KEY" ]]; then
+    echo "$PERSONAL_KEY" > "$HOME/.ssh/personal"
+    chmod 600 "$HOME/.ssh/personal"
+    success "Personal SSH key restored"
+  else
+    warn "Could not find '$BW_SSH_PERSONAL_KEY' in Bitwarden"
+  fi
+
+  # Load keys into ssh-agent
+  eval "$(ssh-agent -s)" &>/dev/null
+  [[ -f "$HOME/.ssh/office" ]]   && ssh-add --apple-use-keychain "$HOME/.ssh/office" 2>/dev/null || true
+  [[ -f "$HOME/.ssh/personal" ]] && ssh-add --apple-use-keychain "$HOME/.ssh/personal" 2>/dev/null || true
+
+  if [[ -z "$OFFICE_KEY" ]] || [[ -z "$PERSONAL_KEY" ]]; then
+    echo ""
+    warn "One or both SSH keys missing from Bitwarden."
+    warn "Run on your current machine: zsh save-ssh-to-bitwarden.sh"
+    warn "Then run setup.sh again on this new machine."
+    read -r "?Press Enter to continue..."
+  else
+    success "SSH keys loaded into ssh-agent"
+  fi
+fi
+
+# ── Write SSH config ─────────────────────────────────────────
+if [[ ! -f "$HOME/.ssh/config" ]]; then
+  # Pull from Bitwarden if available
+  SSH_CONFIG=$(bw get notes "$BW_SSH_CONFIG" --session "$BW_SESSION" 2>/dev/null)
+
+  if [[ -n "$SSH_CONFIG" ]]; then
+    echo "$SSH_CONFIG" > "$HOME/.ssh/config"
+    success "SSH config restored from Bitwarden"
+  else
+    # Write default config (matches your current setup)
+    cat > "$HOME/.ssh/config" << 'EOF'
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+
+# Office GitHub account
+Host github-office
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/office
+  IdentitiesOnly yes
+
+# Personal GitHub account
+Host github-personal
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/personal
+  IdentitiesOnly yes
+
+Host github-personal.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/personal
+  IdentitiesOnly yes
+
+# Default GitHub (personal)
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/personal
+  IdentitiesOnly yes
+EOF
+    success "SSH config written with office + personal setup"
+  fi
+
+  chmod 600 "$HOME/.ssh/config"
+fi
 
 # ══════════════════════════════════════════════════════════════
 # STEP 4 — Oh My Zsh + Shell Config
@@ -300,8 +300,7 @@ if command -v chezmoi &>/dev/null; then
   # Write chezmoi config pointing at the repo (idempotent)
   mkdir -p "$HOME/.config/chezmoi"
   cat > "$HOME/.config/chezmoi/chezmoi.toml" << EOF
-[chezmoi]
-  sourceDir = "$DOTFILES_DIR"
+sourceDir = "$DOTFILES_DIR"
 EOF
   chezmoi apply --source "$DOTFILES_DIR" --force
   success "Dotfiles applied"

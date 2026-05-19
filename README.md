@@ -34,10 +34,9 @@ Scripts (`setup.sh`, `macos.sh`, etc.) are **not** managed by chezmoi — they s
 ### chezmoi config
 `~/.config/chezmoi/chezmoi.toml` tells chezmoi to use this repo as its source:
 ```toml
-[chezmoi]
-  sourceDir = "~/Documents/dot-files"
+sourceDir = "/Users/<you>/Documents/dot-files"
 ```
-`setup.sh` writes this file automatically when it runs.
+`setup.sh` writes this file automatically when it runs, with `$HOME` expanded to your actual home directory. (chezmoi does NOT expand `~` in this config, so an absolute path is required.)
 
 ### Daily workflow
 

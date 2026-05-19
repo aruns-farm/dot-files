@@ -5,7 +5,7 @@
 after-startup-command = [
   'exec-and-forget open -a "Google Chrome"',
   'exec-and-forget open -a "Cursor"',
-  'exec-and-forget open -a "Terminal"',
+  'exec-and-forget open -a "iterm2"',
   'exec-and-forget open -a "Slack"',
   'exec-and-forget open -a "Spotify"',
 ]

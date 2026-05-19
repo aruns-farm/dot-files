@@ -3,6 +3,11 @@
 # Run: brew bundle
 # ============================================================
 
+# ── Taps ─────────────────────────────────────────────────────
+tap "nikitabobko/tap"      # aerospace
+tap "supabase/tap"
+tap "localstack/tap"
+
 # ── Dotfiles ─────────────────────────────────────────────────
 brew "chezmoi"
 
@@ -40,6 +45,17 @@ brew "nvm"
 # ── Python ───────────────────────────────────────────────────
 brew "pyenv"
 brew "pre-commit"
+brew "python@3.10"
+
+# ── Cloud / Backend ──────────────────────────────────────────
+brew "awscli"
+brew "supabase/tap/supabase"
+brew "localstack/tap/localstack-cli"
+
+# ── Mobile / Media ───────────────────────────────────────────
+brew "watchman"
+brew "ffmpeg"
+cask "android-platform-tools"
 
 # ── Cloudflare ───────────────────────────────────────────────
 brew "cloudflared"
@@ -53,3 +69,8 @@ brew "mas"
 # ── GUI Apps ─────────────────────────────────────────────────
 cask "iterm2"
 cask "visual-studio-code"
+cask "aerospace"
+
+# ── Fonts ────────────────────────────────────────────────────
+cask "font-meslo-lg-nerd-font"
+cask "font-hack-nerd-font"
