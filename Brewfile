@@ -74,3 +74,22 @@ cask "aerospace"
 # ── Fonts ────────────────────────────────────────────────────
 cask "font-meslo-lg-nerd-font"
 cask "font-hack-nerd-font"
+
+# ── Terminal workflow (craftzdog setup, added 2026-08-30) ────
+# Shell
+brew "fish"                 # primary shell (zsh kept as fallback)
+brew "mise"                 # node + python versions in fish (replaces nvm/pyenv there)
+# Git
+brew "git-delta"            # diff pager
+brew "ghq"                  # repo organiser, used by fish's Ctrl-F jump
+brew "peco"                 # fuzzy picker for craftzdog's git aliases
+# Neovim toolchain
+brew "tree-sitter-cli"      # required by nvim-treesitter's main branch
+brew "stylua"               # lua formatter
+brew "shfmt"                # shell formatter
+
+# ── GUI Apps ─────────────────────────────────────────────────
+cask "ghostty"              # primary terminal (iterm2 kept as fallback)
+
+# ── Fonts ────────────────────────────────────────────────────
+cask "font-plemol-jp-nf"    # craftzdog's terminal font

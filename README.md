@@ -17,6 +17,14 @@ Arun's macOS dev setup. Run `setup.sh` on a fresh Mac and it handles everything.
 | `ssh-config.example` | SSH config template for office + personal GitHub keys |
 | `save-ssh-to-bitwarden.sh` | Saves SSH keys to Bitwarden (run on existing machine before migrating) |
 | `enable-bitwarden-ssh-agent.sh` | Wires up Bitwarden as your SSH agent |
+| `keymap-atlas.html` | **Searchable keybinding reference** — open it in a browser |
+| `dot_config/nvim/` | Neovim (LazyVim + personal layer) → `~/.config/nvim/` |
+| `dot_config/private_fish/` | fish shell config → `~/.config/fish/` |
+| `dot_config/tmux/` | tmux config → `~/.config/tmux/` |
+| `dot_config/ghostty/` | Ghostty terminal → `~/.config/ghostty/` |
+| `dot_config/mise/` | node + python versions → `~/.config/mise/` |
+| `dot_config/git/`, `dot_gitconfig` | delta + git aliases and identity switching |
+| `dot_config/lazygit/` | lazygit config → `~/.config/lazygit/` |
 
 ---
 
@@ -73,6 +81,56 @@ chezmoi add ~/.some-new-config
 git pull
 chezmoi apply
 ```
+
+---
+
+## Terminal setup (Neovim · tmux · fish · Ghostty)
+
+Based on **[craftzdog/dotfiles](https://github.com/craftzdog/dotfiles)** (Takuya Matsuyama),
+adapted where his config had drifted from current LazyVim. Migrated 2026-08-30.
+
+**Open `keymap-atlas.html` in a browser for the searchable keybinding reference.**
+Press `/` to search, or filter by tool.
+
+| Layer | What |
+|---|---|
+| Terminal | **Ghostty**, Solarized Dark Patched, PlemolJP Console NF, 0.9 opacity |
+| Editor | **LazyVim 16** + his personal layer, solarized-osaka colourscheme |
+| Multiplexer | **tmux**, prefix `C-t`, lazygit popup on `C-t g`, Claude Code on `C-t y` |
+| Shell | **fish** + fisher + tide, with the old `.zshrc` ported into `config-osx.fish` |
+| Versions | **mise** for node/python in fish; zsh still uses nvm/pyenv |
+
+### Things that need a manual step after `chezmoi apply`
+
+```sh
+# 1. fish plugins (fish_plugins is versioned; fisher restores from it)
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+fisher update
+
+# 2. tmux plugin manager
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+~/.config/tmux/plugins/tpm/bin/install_plugins
+
+# 3. Neovim plugins + language servers (lazy-lock.json pins exact versions)
+nvim --headless "+Lazy! sync" +qa
+
+# 4. commitizen, for lazygit's `C` binding (must be under mise's node, not nvm's)
+mise exec node@24 -- npm i -g commitizen cz-git
+
+# 5. make fish the login shell (optional — trial it with `fish` first)
+echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
+chsh -s /opt/homebrew/bin/fish
+```
+
+### Known conflicts
+
+- **`dot_tmux.conf` (untracked) would break this setup.** tmux prefers `~/.tmux.conf`
+  over `~/.config/tmux/tmux.conf`, so if that file ever gets deployed it silently
+  overrides everything above. The current config lives in `dot_config/tmux/`.
+- `setup.sh` still installs Oh My Zsh, nvm and pyenv. Those remain correct for zsh,
+  which is kept as the fallback shell — but fish does not use them.
+- Global npm packages are per-node-version. `git cz` exists on node 24 but not in a
+  project pinned to node 20 via `.nvmrc`.
 
 ---
 

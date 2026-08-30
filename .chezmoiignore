@@ -11,6 +11,12 @@ Brewfile
 
 # Docs
 README.md
+keymap-atlas.html
 
 # macOS junk
 .DS_Store
+
+# Superseded by dot_config/tmux/ (2026-08-30).
+# tmux prefers ~/.tmux.conf over ~/.config/tmux/tmux.conf, so deploying the
+# old one would silently override the current config.
+.tmux.conf

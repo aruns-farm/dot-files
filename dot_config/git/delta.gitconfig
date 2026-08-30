@@ -1,0 +1,20 @@
+# craftzdog/dotfiles .config/git/delta.gitconfig
+# Your `navigate` kept (n/N to jump between diff hunks); he has no equivalent.
+# NOTE: his side-by-side = false, yours was true. His wins here — flip it back
+# if you prefer the two-column view.
+[delta]
+    line-numbers = true
+    side-by-side = false
+    navigate = true
+    features = decorations
+    syntax-theme = Monokai Extended
+[delta "interactive"]
+    keep-plus-minus-markers = true
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax

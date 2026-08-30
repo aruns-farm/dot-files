@@ -1,0 +1,15 @@
+# craftzdog's list trimmed to what you actually use.
+# His full list also had: bun, ruby, rust, ghq (ghq installed via brew instead).
+# node pinned to 24 to match your nvm default — "latest" gave 25.x and silently
+# diverged from zsh.
+[tools]
+node = "24"
+python = "3.14"
+
+[settings]
+# Off by default in current mise. Without this, project .nvmrc /
+# .python-version files are IGNORED and you silently get the global version.
+idiomatic_version_file_enable_tools = ["node", "python"]
+# Matches your old zshrc load-nvmrc hook, which ran `nvm install` when a
+# project asked for a version you did not have.
+auto_install = true

@@ -1,0 +1,31 @@
+# ~/.config/ghostty/config — from craftzdog/dotfiles
+# Reload without restarting: cmd+shift+, 
+
+# Colour scheme. `ghostty +list-themes` shows all ~400 built in.
+# NOTE: his repo says "Solarized Dark - Patched"; current ghostty names it
+# without the dashes. "Solarized Osaka Night" also ships now and matches the
+# Neovim colourscheme we're installing next — try both.
+theme = "Solarized Dark Patched"
+
+# Translucent window with the desktop blurred behind it. This is the look
+# from his videos. Set opacity to 1 if it makes text hard to read.
+background-opacity = 0.9
+background-blur-radius = 20
+
+# Overrides the theme's background with his near-black blue. The theme sets a
+# background too — this line wins because it comes after.
+background = #031219
+
+font-family = "PlemolJP Console NF"
+
+cursor-style = block
+cursor-style-blink = true
+
+# On macOS the left Option key sends Alt (so Neovim's <M-...> maps work).
+# Right Option still types special characters like ø and ¬.
+macos-option-as-alt = left
+
+# Frees alt+left / alt+right so tmux and Neovim can use them instead of
+# ghostty eating them for word-jumping.
+keybind = alt+left=unbind
+keybind = alt+right=unbind

@@ -1,0 +1,766 @@
+<title>Osaka Keymap Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+
+<style>
+  /* ── Solarized, pulled from the actual configs this documents.
+       Dark ground #031219 is the literal value in ~/.config/ghostty/config. ── */
+  :root {
+    --bg:        #fdf6e3;
+    --surface:   #f2ecd8;
+    --surface-2: #eae3cc;
+    --text:      #073642;
+    --head:      #002b36;
+    --muted:     #657b83;
+    --line:      #ddd5bd;
+    --line-soft: #e7dfc8;
+    --yellow:    #a37800;
+    --blue:      #1f6f9e;
+    --magenta:   #b32e6d;
+    --green:     #6b7a00;
+    --orange:    #bf4a13;
+    --cyan:      #1d7c78;
+    --kbd-bg:    #fffdf5;
+    --kbd-line:  #cfc6ac;
+    --shadow:    0 1px 0 rgba(7,54,66,.06), 0 2px 10px rgba(7,54,66,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #031219;
+      --surface:   #062330;
+      --surface-2: #073642;
+      --text:      #93a1a1;
+      --head:      #eee8d5;
+      --muted:     #6b8189;
+      --line:      #0d3140;
+      --line-soft: #0a2733;
+      --yellow:    #d3a029;
+      --blue:      #4ba3e3;
+      --magenta:   #e05f97;
+      --green:     #a4b800;
+      --orange:    #e2652a;
+      --cyan:      #34c2bc;
+      --kbd-bg:    #0b2b38;
+      --kbd-line:  #17475a;
+      --shadow:    0 1px 0 rgba(0,0,0,.3), 0 2px 12px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:        #031219;
+    --surface:   #062330;
+    --surface-2: #073642;
+    --text:      #93a1a1;
+    --head:      #eee8d5;
+    --muted:     #6b8189;
+    --line:      #0d3140;
+    --line-soft: #0a2733;
+    --yellow:    #d3a029;
+    --blue:      #4ba3e3;
+    --magenta:   #e05f97;
+    --green:     #a4b800;
+    --orange:    #e2652a;
+    --cyan:      #34c2bc;
+    --kbd-bg:    #0b2b38;
+    --kbd-line:  #17475a;
+    --shadow:    0 1px 0 rgba(0,0,0,.3), 0 2px 12px rgba(0,0,0,.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px 96px; }
+
+  /* ── Masthead ─────────────────────────────────────────── */
+  header.masthead {
+    padding: 52px 0 28px;
+    border-bottom: 2px solid var(--line);
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--yellow); font-weight: 600;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .eyebrow .sep { color: var(--muted); opacity: .55; }
+  h1 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 600; font-size: clamp(30px, 5.2vw, 46px);
+    line-height: 1.06; letter-spacing: -.02em;
+    color: var(--head); margin: 0; text-wrap: balance;
+  }
+  h1 .accent { color: var(--yellow); }
+  .standfirst {
+    max-width: 62ch; color: var(--muted); font-size: 15.5px; margin: 0;
+  }
+  .standfirst code { color: var(--text); }
+
+  /* ── Search rail ──────────────────────────────────────── */
+  .rail {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--bg);
+    padding: 14px 0 12px;
+    border-bottom: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 11px;
+  }
+  .search-row { display: flex; gap: 10px; align-items: center; }
+  .search-shell {
+    flex: 1; display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 7px; padding: 0 12px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .search-shell:focus-within {
+    border-color: var(--yellow);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--yellow) 18%, transparent);
+  }
+  .search-shell .prompt {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    color: var(--yellow); font-weight: 700; font-size: 14px; user-select: none;
+  }
+  #q {
+    flex: 1; border: 0; outline: 0; background: transparent;
+    color: var(--text); padding: 11px 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 14px;
+  }
+  #q::placeholder { color: var(--muted); opacity: .7; }
+  .slashhint {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11px; color: var(--muted);
+    border: 1px solid var(--kbd-line); border-radius: 4px;
+    padding: 2px 6px; user-select: none;
+  }
+  #clear {
+    border: 0; background: transparent; color: var(--muted); cursor: pointer;
+    font-size: 17px; line-height: 1; padding: 4px 2px;
+  }
+  #clear:hover { color: var(--orange); }
+  #clear[hidden] { display: none !important; }
+
+  .chips { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+  .chip {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; font-weight: 500; letter-spacing: .04em;
+    padding: 5px 11px; border-radius: 999px; cursor: pointer;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--line);
+    transition: all .13s;
+  }
+  .chip:hover { color: var(--text); border-color: var(--kbd-line); }
+  .chip[aria-pressed="true"] {
+    background: var(--surface-2); color: var(--head);
+    border-color: var(--yellow);
+  }
+  .chip:focus-visible, #q:focus-visible, .toggle:focus-visible, #clear:focus-visible {
+    outline: 2px solid var(--blue); outline-offset: 2px;
+  }
+  .count {
+    margin-left: auto; font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .toggle {
+    border: 1px solid var(--line); background: var(--surface);
+    color: var(--muted); border-radius: 7px; cursor: pointer;
+    font-family: "IBM Plex Mono", monospace; font-size: 15px;
+    width: 38px; height: 38px; flex-shrink: 0;
+  }
+  .toggle:hover { color: var(--head); border-color: var(--kbd-line); }
+
+  /* ── Sections ─────────────────────────────────────────── */
+  section { margin-top: 44px; scroll-margin-top: 130px; }
+  section[hidden] { display: none !important; }
+  .sec-head {
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    padding-bottom: 9px; border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+  }
+  h2 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 19px; font-weight: 600; letter-spacing: -.01em;
+    color: var(--head); margin: 0;
+  }
+  .sec-meta {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 11.5px; color: var(--muted);
+  }
+  .sec-meta b { color: var(--yellow); font-weight: 500; }
+  .sec-note {
+    font-size: 13.5px; color: var(--muted); margin: 12px 0 0;
+    max-width: 68ch;
+  }
+
+  h3 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--cyan);
+    margin: 26px 0 8px;
+  }
+  h3[hidden] { display: none !important; }
+
+  /* ── Key tables ───────────────────────────────────────── */
+  .tbl { width: 100%; border-collapse: collapse; }
+  .tbl tr { border-bottom: 1px solid var(--line-soft); }
+  .tbl tr:last-child { border-bottom: 0; }
+  .tbl tr[hidden] { display: none !important; }
+  .tbl tr:hover { background: var(--surface); }
+  .tbl td { padding: 7px 10px 7px 0; vertical-align: baseline; }
+  .tbl td.k { width: 190px; white-space: nowrap; }
+  .tbl td.d { color: var(--text); font-size: 14.2px; }
+  .tbl td.d .why { color: var(--muted); }
+
+  kbd {
+    display: inline-block;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12.5px; font-weight: 500;
+    background: var(--kbd-bg); color: var(--head);
+    border: 1px solid var(--kbd-line); border-radius: 4px;
+    padding: 2px 6px; box-shadow: var(--shadow);
+    white-space: nowrap;
+  }
+  kbd + kbd { margin-left: 3px; }
+  .then { color: var(--muted); font-size: 11px; margin: 0 3px; }
+
+  code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12.6px; background: var(--surface-2);
+    padding: 1px 5px; border-radius: 3px; color: var(--head);
+  }
+
+  /* ── Callouts ─────────────────────────────────────────── */
+  .note {
+    border-left: 3px solid var(--orange);
+    background: var(--surface); border-radius: 0 6px 6px 0;
+    padding: 12px 15px; margin: 16px 0 0; font-size: 13.8px;
+  }
+  .note.blue  { border-left-color: var(--blue); }
+  .note.green { border-left-color: var(--green); }
+  .note b { color: var(--head); font-weight: 600; }
+
+  /* ── File map ─────────────────────────────────────────── */
+  .filemap {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 8px; padding: 16px 18px; margin-top: 14px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 12.6px; line-height: 1.95;
+    overflow-x: auto;
+  }
+  .filemap .path { color: var(--head); }
+  .filemap .cmt  { color: var(--muted); }
+  .filemap .hl   { color: var(--yellow); }
+
+  .empty {
+    text-align: center; padding: 60px 20px; color: var(--muted);
+    font-family: "JetBrains Mono", monospace; font-size: 13.5px;
+  }
+  .empty[hidden] { display: none !important; }
+
+  footer {
+    margin-top: 60px; padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted);
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  footer a { color: var(--blue); }
+
+  mark {
+    background: color-mix(in srgb, var(--yellow) 30%, transparent);
+    color: inherit; border-radius: 2px; padding: 0 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+  @media (max-width: 620px) {
+    .tbl td.k { width: auto; display: block; padding-bottom: 2px; }
+    .tbl td.d { display: block; padding-top: 0; padding-bottom: 9px; }
+    .count { width: 100%; margin-left: 0; }
+  }
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <div class="eyebrow">
+    <span>dot-files</span><span class="sep">·</span>
+    <span>LazyVim</span><span class="sep">·</span>
+    <span>tmux</span><span class="sep">·</span>
+    <span>fish</span><span class="sep">·</span>
+    <span>ghostty</span>
+  </div>
+  <h1>Osaka <span class="accent">Keymap</span> Atlas</h1>
+  <p class="standfirst">
+    Every key that changed when you left VS Code. Search it when your fingers
+    forget. Leader is <kbd>Space</kbd>, tmux prefix is <kbd>Ctrl</kbd><kbd>t</kbd>,
+    and the things most likely to confuse you are marked in orange.
+  </p>
+</header>
+
+<div class="rail">
+  <div class="search-row">
+    <div class="search-shell">
+      <span class="prompt">❯</span>
+      <input id="q" type="search" placeholder="search keys, actions, plugins…"
+             autocomplete="off" spellcheck="false" aria-label="Search keybindings">
+      <span class="slashhint">/</span>
+      <button id="clear" hidden aria-label="Clear search">✕</button>
+    </div>
+    <button class="toggle" id="theme" aria-label="Toggle theme">◐</button>
+  </div>
+  <div class="chips" role="group" aria-label="Filter by tool">
+    <button class="chip" data-f="all" aria-pressed="true">all</button>
+    <button class="chip" data-f="nvim" aria-pressed="false">nvim</button>
+    <button class="chip" data-f="tmux" aria-pressed="false">tmux</button>
+    <button class="chip" data-f="fish" aria-pressed="false">fish</button>
+    <button class="chip" data-f="git" aria-pressed="false">git</button>
+    <button class="chip" data-f="term" aria-pressed="false">ghostty</button>
+    <button class="chip" data-f="gotcha" aria-pressed="false">gotchas</button>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<p class="empty" id="empty" hidden>no match — try <code>split</code>, <code>grep</code>, <code>rename</code>, <code>popup</code></p>
+
+<!-- ══════════════ NEOVIM ══════════════ -->
+<section data-tool="nvim">
+  <div class="sec-head">
+    <h2>Neovim</h2>
+    <span class="sec-meta">leader <b>Space</b> · LazyVim 16 + personal layer</span>
+  </div>
+  <p class="sec-note">
+    Press <kbd>Space</kbd> and wait one second — which-key lists everything live.
+    <kbd>Space</kbd><span class="then">then</span><kbd>s</kbd><kbd>k</kbd> fuzzy-searches
+    all keymaps. Those two beat this page for discovery; this page is for when you
+    half-remember something.
+  </p>
+
+  <h3>Windows &amp; splits</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>ss</kbd></td><td class="d">Split horizontal</td></tr>
+    <tr><td class="k"><kbd>sv</kbd></td><td class="d">Split vertical</td></tr>
+    <tr><td class="k"><kbd>sh</kbd> <kbd>sj</kbd> <kbd>sk</kbd> <kbd>sl</kbd></td><td class="d">Move to window left / down / up / right</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>w</kbd> <kbd>←↑↓→</kbd></td><td class="d">Resize the current window</td></tr>
+    <tr><td class="k"><kbd>te</kbd></td><td class="d">New tab</td></tr>
+    <tr><td class="k"><kbd>Tab</kbd> / <kbd>Shift</kbd><kbd>Tab</kbd></td><td class="d">Next / previous tab <span class="why">— bufferline runs in tabs mode, so the top bar tracks these</span></td></tr>
+  </tbody></table>
+
+  <h3>Finding things — the Cmd+P replacement</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>;</kbd><kbd>f</kbd></td><td class="d">Find files, hidden included <span class="why">— was Cmd+P</span></td></tr>
+    <tr><td class="k"><kbd>;</kbd><kbd>r</kbd></td><td class="d">Live grep across the project <span class="why">— was Cmd+Shift+F</span></td></tr>
+    <tr><td class="k"><kbd>\</kbd><kbd>\</kbd></td><td class="d">List open buffers</td></tr>
+    <tr><td class="k"><kbd>;</kbd><kbd>;</kbd></td><td class="d">Resume the last picker, query intact <span class="why">— no VS Code equivalent, and it's the one you'll miss elsewhere</span></td></tr>
+    <tr><td class="k"><kbd>;</kbd><kbd>e</kbd></td><td class="d">Project diagnostics <span class="why">— was the Problems panel</span></td></tr>
+    <tr><td class="k"><kbd>;</kbd><kbd>s</kbd></td><td class="d">Symbols in this file via treesitter <span class="why">— was Cmd+Shift+O</span></td></tr>
+    <tr><td class="k"><kbd>;</kbd><kbd>c</kbd></td><td class="d">LSP incoming calls for the word under the cursor</td></tr>
+    <tr><td class="k"><kbd>;</kbd><kbd>t</kbd></td><td class="d">Search <code>:help</code> tags</td></tr>
+    <tr><td class="k"><kbd>sf</kbd></td><td class="d">File browser rooted at the current file's directory</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>f</kbd><kbd>P</kbd></td><td class="d">Find a file inside a plugin's source</td></tr>
+  </tbody></table>
+
+  <h3>Inside a picker</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>j</kbd> / <kbd>Ctrl</kbd><kbd>k</kbd></td><td class="d">Move selection down / up</td></tr>
+    <tr><td class="k"><kbd>Enter</kbd></td><td class="d">Open</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>v</kbd> / <kbd>Ctrl</kbd><kbd>x</kbd></td><td class="d">Open in a vertical / horizontal split</td></tr>
+    <tr><td class="k"><kbd>Esc</kbd></td><td class="d">Close the picker</td></tr>
+  </tbody></table>
+
+  <h3>Inside the file browser (<kbd>sf</kbd>)</h3>
+  <p class="sec-note">It opens in <b>normal mode</b>, not insert — that's what trips people up.</p>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>N</kbd></td><td class="d">Create a file or directory</td></tr>
+    <tr><td class="k"><kbd>h</kbd></td><td class="d">Go to parent directory</td></tr>
+    <tr><td class="k"><kbd>/</kbd></td><td class="d">Start typing to filter</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>u</kbd> / <kbd>Ctrl</kbd><kbd>d</kbd></td><td class="d">Jump 10 entries up / down</td></tr>
+  </tbody></table>
+
+  <h3>Language server</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>gd</kbd></td><td class="d">Go to definition <span class="why">— this version never reuses the window, so you keep your place</span></td></tr>
+    <tr><td class="k"><kbd>gr</kbd></td><td class="d">References</td></tr>
+    <tr><td class="k"><kbd>gI</kbd></td><td class="d">Implementations</td></tr>
+    <tr><td class="k"><kbd>gy</kbd></td><td class="d">Type definition</td></tr>
+    <tr><td class="k"><kbd>K</kbd></td><td class="d">Hover documentation</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>c</kbd><kbd>a</kbd></td><td class="d">Code action</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>c</kbd><kbd>r</kbd></td><td class="d">Rename symbol, with every call site previewed live as you type</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>i</kbd></td><td class="d">Toggle inlay hints <span class="why">— silent unless an LSP that supports them is attached</span></td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>j</kbd></td><td class="d">Next diagnostic</td></tr>
+    <tr><td class="k"><kbd>[d</kbd> / <kbd>]d</kbd></td><td class="d">Previous / next diagnostic</td></tr>
+    <tr><td class="k"><code>:ToggleAutoformat</code></td><td class="d">Turn format-on-save off for this session</td></tr>
+  </tbody></table>
+
+  <h3>Editing</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>x</kbd></td><td class="d">Delete a character <b>without</b> touching any register</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>d</kbd> / <kbd>Space</kbd><kbd>D</kbd></td><td class="d">Delete into the black hole — clipboard survives</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>c</kbd> / <kbd>Space</kbd><kbd>C</kbd></td><td class="d">Change into the black hole</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>p</kbd> / <kbd>Space</kbd><kbd>P</kbd></td><td class="d">Paste your last <em>yank</em> from register <code>"0</code> <span class="why">— survives any delete you did since. Fixes vim's most annoying default.</span></td></tr>
+    <tr><td class="k"><kbd>dw</kbd></td><td class="d">Delete a word backwards</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>o</kbd> / <kbd>Space</kbd><kbd>O</kbd></td><td class="d">Open a line below / above with no comment continuation</td></tr>
+    <tr><td class="k"><kbd>+</kbd> / <kbd>-</kbd></td><td class="d">Increment / decrement the number under the cursor</td></tr>
+    <tr><td class="k"><kbd>ggVG</kbd></td><td class="d">Select the whole file <span class="why">— the source config mapped this to Ctrl+A, but dial.nvim needs that key</span></td></tr>
+  </tbody></table>
+
+  <h3>Smart increment — dial.nvim</h3>
+  <p class="sec-note"><kbd>Ctrl</kbd><kbd>a</kbd> and <kbd>Ctrl</kbd><kbd>x</kbd> understand more than numbers:</p>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><code>42</code> → <code>43</code></td><td class="d">Decimal integers</td></tr>
+    <tr><td class="k"><code>0x1f</code> → <code>0x20</code></td><td class="d">Hex</td></tr>
+    <tr><td class="k"><code>true</code> ↔ <code>false</code></td><td class="d">Booleans — the reason to keep this key</td></tr>
+    <tr><td class="k"><code>let</code> ↔ <code>const</code></td><td class="d">JS declarations</td></tr>
+    <tr><td class="k"><code>1.2.3</code> → <code>1.2.4</code></td><td class="d">Semver</td></tr>
+    <tr><td class="k"><code>2026/08/30</code></td><td class="d">Dates</td></tr>
+  </tbody></table>
+
+  <h3>Bracket navigation — mini.bracketed</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>[b</kbd> <kbd>]b</kbd></td><td class="d">Previous / next buffer</td></tr>
+    <tr><td class="k"><kbd>[c</kbd> <kbd>]c</kbd></td><td class="d">Comment block</td></tr>
+    <tr><td class="k"><kbd>[i</kbd> <kbd>]i</kbd></td><td class="d">Indent level</td></tr>
+    <tr><td class="k"><kbd>[j</kbd> <kbd>]j</kbd></td><td class="d">Jumplist entry</td></tr>
+    <tr><td class="k"><kbd>[n</kbd> <kbd>]n</kbd></td><td class="d">Treesitter node</td></tr>
+    <tr><td class="k"><kbd>[x</kbd> <kbd>]x</kbd></td><td class="d">Merge conflict marker</td></tr>
+  </tbody></table>
+
+  <h3>Git &amp; UI</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>Space</kbd><kbd>g</kbd><kbd>b</kbd></td><td class="d">Blame the current line</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>g</kbd><kbd>o</kbd></td><td class="d">Open this file on GitHub in the browser</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>z</kbd></td><td class="d">Zen mode — centers the buffer, hides everything else</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>r</kbd></td><td class="d">Rewrite every hex colour on this line as <code>hsl()</code> <span class="why">— silent if the line has no hex</span></td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>t</kbd><kbd>h</kbd></td><td class="d">Close hidden buffers</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>t</kbd><kbd>u</kbd></td><td class="d">Close unnamed buffers</td></tr>
+    <tr><td class="k"><code>:Lazy</code></td><td class="d">Plugin manager — install, update, profile startup</td></tr>
+    <tr><td class="k"><code>:LazyExtras</code></td><td class="d">Browse and toggle LazyVim's opt-in language packs</td></tr>
+    <tr><td class="k"><code>:Mason</code></td><td class="d">Manage language servers and formatters</td></tr>
+  </tbody></table>
+</section>
+
+<!-- ══════════════ TMUX ══════════════ -->
+<section data-tool="tmux">
+  <div class="sec-head">
+    <h2>tmux</h2>
+    <span class="sec-meta">prefix <b>Ctrl+t</b> — changed from your old Ctrl+a</span>
+  </div>
+  <p class="sec-note">Everything below means: press <kbd>Ctrl</kbd><kbd>t</kbd>, release, then the key.</p>
+
+  <h3>Popup bindings</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>g</kbd></td><td class="d">lazygit in an 80% popup over your code <span class="why">— the single best thing in his setup</span></td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>y</kbd></td><td class="d">Claude Code in a popup, one persistent session per directory</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>o</kbd></td><td class="d">Open the current directory in Finder</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>e</kbd></td><td class="d">Kill every pane <em>except</em> this one</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>r</kbd></td><td class="d">Reload the tmux config</td></tr>
+  </tbody></table>
+
+  <h3>Panes &amp; windows</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>|</kbd> / <kbd>-</kbd></td><td class="d">Split vertical / horizontal</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd></td><td class="d">Move between panes</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>H</kbd><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd></td><td class="d">Resize the current pane</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>c</kbd></td><td class="d">New window</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>←</kbd> / <kbd>→</kbd></td><td class="d">Move this window left / right in the tab order <span class="why">— no prefix needed</span></td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>[</kbd></td><td class="d">Copy mode — vi keys, <kbd>v</kbd> select, <kbd>y</kbd> yank</td></tr>
+  </tbody></table>
+
+  <h3>Sessions</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><code>t</code></td><td class="d">fzf-pick an existing session <span class="why">— your own function, ported to fish</span></td></tr>
+    <tr><td class="k"><code>t office</code></td><td class="d">Attach to that session, or create it in the right directory</td></tr>
+    <tr><td class="k"><code>t anything</code></td><td class="d">Unknown name? resolves the directory through zoxide</td></tr>
+    <tr><td class="k"><code>tmux kill-server</code></td><td class="d">Nuclear reset — <b>the fix when a config change seems ignored</b></td></tr>
+  </tbody></table>
+
+  <p class="note green"><b>Sessions survive reboots.</b> tmux-resurrect and tmux-continuum
+  auto-save every 15 minutes and restore your panes, including nvim sessions. That's
+  kept from your old config — not part of the upstream config.</p>
+</section>
+
+<!-- ══════════════ FISH ══════════════ -->
+<section data-tool="fish">
+  <div class="sec-head">
+    <h2>fish</h2>
+    <span class="sec-meta">tide prompt · fisher · mise · zoxide</span>
+  </div>
+
+  <h3>Keys</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>f</kbd></td><td class="d">Fuzzy-jump to any project directory <span class="why">— scans ghq root plus your office / personal / professional / dev folders</span></td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>o</kbd></td><td class="d">fzf directory search</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>r</kbd></td><td class="d">fzf history search</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>l</kbd></td><td class="d">Accept one character of the autosuggestion</td></tr>
+    <tr><td class="k"><kbd>→</kbd></td><td class="d">Accept the whole autosuggestion</td></tr>
+    <tr><td class="k"><kbd>Alt</kbd><kbd>↑</kbd> / <kbd>↓</kbd></td><td class="d">History search filtered by what you've typed</td></tr>
+  </tbody></table>
+
+  <h3>Commands &amp; aliases</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><code>z &lt;partial&gt;</code></td><td class="d">Jump to a frecent directory — your 70-entry zoxide history carried over</td></tr>
+    <tr><td class="k"><code>ll</code> / <code>lla</code></td><td class="d">eza listing with icons / including hidden</td></tr>
+    <tr><td class="k"><code>lt</code></td><td class="d">Tree view, two levels deep</td></tr>
+    <tr><td class="k"><code>g</code></td><td class="d">git</td></tr>
+    <tr><td class="k"><code>c</code> / <code>claude-yolo</code></td><td class="d">claude / claude with permission prompts skipped</td></tr>
+    <tr><td class="k"><code>lg</code></td><td class="d">lazygit</td></tr>
+    <tr><td class="k"><code>office</code> <code>personal</code> <code>professional</code> <code>docs</code> <code>dev</code></td><td class="d">Jump to your project roots</td></tr>
+    <tr><td class="k"><code>bwunlock</code></td><td class="d">Unlock Bitwarden and export the session key</td></tr>
+    <tr><td class="k"><code>ports</code></td><td class="d">What's listening right now</td></tr>
+    <tr><td class="k"><code>ip</code></td><td class="d">Your public IP</td></tr>
+    <tr><td class="k"><code>brewup</code></td><td class="d">Update, upgrade, cleanup</td></tr>
+    <tr><td class="k"><code>reload</code> / <code>fishconfig</code></td><td class="d">Re-source / edit the fish config</td></tr>
+    <tr><td class="k"><code>fisher install &lt;repo&gt;</code></td><td class="d">Add a fish plugin</td></tr>
+    <tr><td class="k"><code>tide configure</code></td><td class="d">Re-run the prompt wizard</td></tr>
+  </tbody></table>
+
+  <h3>Node &amp; Python — mise, not nvm</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><code>mise ls</code></td><td class="d">What's installed and what's active here</td></tr>
+    <tr><td class="k"><code>mise install node@22</code></td><td class="d">Add a version</td></tr>
+    <tr><td class="k"><code>mise use node@22</code></td><td class="d">Pin this project to a version</td></tr>
+    <tr><td class="k"><code>mise current</code></td><td class="d">Why am I on this version? — names the file that decided</td></tr>
+  </tbody></table>
+  <p class="note blue"><b>fish uses mise; zsh still uses nvm and pyenv.</b> They don't
+  interfere. Your <code>.nvmrc</code> and <code>.python-version</code> files still work
+  in fish — verified with node 20 and 22. Default outside a project is node 24.
+  Global npm packages are per-version, so <code>git cz</code> exists on node 24 but not
+  on a project pinned to 20 — same as nvm always behaved.</p>
+</section>
+
+<!-- ══════════════ GIT ══════════════ -->
+<section data-tool="git">
+  <div class="sec-head">
+    <h2>git &amp; lazygit</h2>
+    <span class="sec-meta">delta pager · peco pickers · commitizen</span>
+  </div>
+
+  <h3>Added aliases</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><code>git hist</code></td><td class="d">Graph log, relative dates, all branches — his daily driver</td></tr>
+    <tr><td class="k"><code>git llog</code></td><td class="d">Graph log with per-file status</td></tr>
+    <tr><td class="k"><code>git ps</code> / <code>git pl</code></td><td class="d">Push / pull the current branch by name</td></tr>
+    <tr><td class="k"><code>git open</code></td><td class="d">Open this repo on GitHub</td></tr>
+    <tr><td class="k"><code>git a</code></td><td class="d">Fuzzy-pick files to stage</td></tr>
+    <tr><td class="k"><code>git df</code></td><td class="d">Fuzzy-pick a commit, show its diff</td></tr>
+    <tr><td class="k"><code>git find &lt;str&gt;</code></td><td class="d">Find commits that touched a string, then diff one</td></tr>
+    <tr><td class="k"><code>git edit-unmerged</code></td><td class="d">Open every conflicted file in nvim</td></tr>
+    <tr><td class="k"><code>git add-unmerged</code></td><td class="d">Stage every conflicted file</td></tr>
+    <tr><td class="k"><code>git ba</code> <code>bm</code> <code>bn</code></td><td class="d">Branches: all / merged / not merged</td></tr>
+  </tbody></table>
+
+  <h3>Yours, kept</h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><code>git lg</code></td><td class="d">One-line graph log</td></tr>
+    <tr><td class="k"><code>git undo</code></td><td class="d">Undo the last commit, keep the changes</td></tr>
+    <tr><td class="k"><code>git wip</code></td><td class="d">Commit everything as "wip"</td></tr>
+    <tr><td class="k"><code>git oops</code></td><td class="d">Amend without editing the message</td></tr>
+    <tr><td class="k"><kbd>n</kbd> / <kbd>N</kbd></td><td class="d">In a delta diff: jump between hunks</td></tr>
+  </tbody></table>
+
+  <h3>lazygit — <kbd>Ctrl</kbd><kbd>t</kbd><span class="then">then</span><kbd>g</kbd></h3>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>Space</kbd></td><td class="d">Stage / unstage the selected file or hunk</td></tr>
+    <tr><td class="k"><kbd>c</kbd></td><td class="d">Commit</td></tr>
+    <tr><td class="k"><kbd>C</kbd></td><td class="d">Commit via commitizen — guided conventional commits</td></tr>
+    <tr><td class="k"><kbd>P</kbd> / <kbd>p</kbd></td><td class="d">Push / pull</td></tr>
+    <tr><td class="k"><kbd>Tab</kbd></td><td class="d">Cycle panels</td></tr>
+    <tr><td class="k"><kbd>?</kbd></td><td class="d">Full keybinding help</td></tr>
+    <tr><td class="k"><kbd>q</kbd></td><td class="d">Quit back to your code</td></tr>
+  </tbody></table>
+  <p class="note blue"><b>Your identity switching is intact.</b> Repos under
+  <code>office</code>, <code>personal</code> and <code>professional</code> still pick up
+  their own name and email automatically.</p>
+</section>
+
+<!-- ══════════════ GHOSTTY ══════════════ -->
+<section data-tool="term">
+  <div class="sec-head">
+    <h2>Ghostty</h2>
+    <span class="sec-meta">Solarized Dark Patched · PlemolJP Console NF</span>
+  </div>
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>Cmd</kbd><kbd>Shift</kbd><kbd>,</kbd></td><td class="d">Reload the config without restarting</td></tr>
+    <tr><td class="k"><kbd>Cmd</kbd><kbd>t</kbd> / <kbd>Cmd</kbd><kbd>n</kbd></td><td class="d">New tab / new window</td></tr>
+    <tr><td class="k"><kbd>Cmd</kbd><kbd>+</kbd> / <kbd>Cmd</kbd><kbd>-</kbd></td><td class="d">Font size</td></tr>
+    <tr><td class="k"><code>ghostty +list-themes</code></td><td class="d">Browse ~400 built-in themes</td></tr>
+    <tr><td class="k"><code>ghostty +list-fonts</code></td><td class="d">Font families Ghostty can see</td></tr>
+  </tbody></table>
+  <p class="note blue">Try <code>theme = "Solarized Osaka Night"</code> — it ships with
+  Ghostty and matches the Neovim colourscheme more closely than the Patched variant.
+  Set <code>background-opacity = 1</code> if the transparency hurts readability.</p>
+</section>
+
+<!-- ══════════════ GOTCHAS ══════════════ -->
+<section data-tool="gotcha">
+  <div class="sec-head">
+    <h2>Gotchas</h2>
+    <span class="sec-meta">the things that will confuse you, and why</span>
+  </div>
+
+  <table class="tbl"><tbody>
+    <tr><td class="k"><kbd>j</kbd><kbd>j</kbd><kbd>j</kbd>…</td><td class="d"><b>"Hold it Cowboy! 🤠"</b> — <code>discipline.cowboy()</code> blocks <kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd><kbd>+</kbd><kbd>-</kbd> after 10 rapid presses. It's a habit trainer. Use <code>10j</code>. Delete <code>lua/user/discipline.lua</code> to disable.</td></tr>
+    <tr><td class="k"><kbd>Enter</kbd> in normal mode</td><td class="d">Remapped. Terminals send <code>Ctrl+m</code> for Enter, and <code>keymaps.lua</code> maps <kbd>Ctrl</kbd><kbd>m</kbd> → <kbd>Ctrl</kbd><kbd>i</kbd>, so Enter jumps <em>forward</em> in the jumplist instead of moving down a line.</td></tr>
+    <tr><td class="k"><kbd>s</kbd> alone</td><td class="d">No longer substitutes a character — it waits for <kbd>ss</kbd> <kbd>sv</kbd> <kbd>sh</kbd> <kbd>sf</kbd>. Use <code>cl</code> to substitute. Flash.nvim was disabled to free this key.</td></tr>
+    <tr><td class="k"><kbd>;</kbd> alone</td><td class="d">Was repeat-last-<kbd>f</kbd>/<kbd>t</kbd>. Now a telescope prefix, and <kbd>;</kbd><kbd>;</kbd> is taken entirely. <kbd>,</kbd> still does reverse-repeat.</td></tr>
+    <tr><td class="k">Mouse does nothing</td><td class="d">Deliberate. <code>vim.opt.mouse = ""</code> in <code>options.lua</code>. lazygit has <code>mouseEvents: false</code> too.</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>t</kbd> in fzf</td><td class="d">tmux claims it as the prefix, so fzf's paste-file-path widget won't fire inside tmux.</td></tr>
+    <tr><td class="k">tmux ignores a config change</td><td class="d">A stale server is still holding the old config. <code>tmux kill-server</code>.</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>r</kbd> does nothing</td><td class="d">It only rewrites hex colours, and only on the current line. No hex → silent no-op.</td></tr>
+    <tr><td class="k"><kbd>Space</kbd><kbd>i</kbd> does nothing</td><td class="d">Needs an attached LSP that provides inlay hints. Nothing renders in a CSS file or a plain buffer.</td></tr>
+    <tr><td class="k">Wrong node version</td><td class="d">Homebrew has its own node at <code>/opt/homebrew/bin/node</code>. If mise can't supply the version a project asks for, PATH falls through to it. Fix: <code>mise install node@&lt;version&gt;</code>.</td></tr>
+    <tr><td class="k">zoxide warning on every shell</td><td class="d">Pre-existing: <code>zoxide init</code> sits mid-file in <code>~/.zshrc</code> and wants to be last. Harmless. fish doesn't have it.</td></tr>
+    <tr><td class="k"><code>:TSPlaygroundToggle</code></td><td class="d">Won't work — that plugin is archived. Use built-in <code>:InspectTree</code> and <code>:Inspect</code>.</td></tr>
+  </tbody></table>
+</section>
+
+<!-- ══════════════ FILE MAP ══════════════ -->
+<section data-tool="all">
+  <div class="sec-head">
+    <h2>Where everything lives</h2>
+    <span class="sec-meta">when you want to change something</span>
+  </div>
+  <div class="filemap">
+<span class="cmt">── neovim ─────────────────────────────────────────────</span>
+<span class="path">~/.config/nvim/lua/config/lazy.lua</span>      <span class="cmt">LazyVim + extras list</span>
+<span class="path">~/.config/nvim/lua/config/options.lua</span>   <span class="cmt">vim settings</span>
+<span class="path">~/.config/nvim/lua/config/keymaps.lua</span>   <span class="cmt">his keymaps + cowboy</span>
+<span class="path">~/.config/nvim/lua/plugins/</span>             <span class="cmt">editor · ui · coding · lsp · treesitter</span>
+<span class="path">~/.config/nvim/lua/user/</span>           <span class="cmt">discipline · hsl · lsp helpers</span>
+
+<span class="cmt">── shell &amp; terminal ───────────────────────────────────</span>
+<span class="path">~/.config/fish/config.fish</span>              <span class="cmt">his base</span>
+<span class="path">~/.config/fish/config-osx.fish</span>          <span class="cmt"><span class="hl">your ported zshrc lives here</span></span>
+<span class="path">~/.config/fish/functions/</span>               <span class="cmt">t · bwunlock · fzf_change_directory</span>
+<span class="path">~/.config/ghostty/config</span>                <span class="cmt">theme · font · opacity</span>
+<span class="path">~/.config/mise/config.toml</span>              <span class="cmt">node &amp; python versions</span>
+
+<span class="cmt">── tmux &amp; git ─────────────────────────────────────────</span>
+<span class="path">~/.config/tmux/tmux.conf</span>                <span class="cmt">prefix, plugins</span>
+<span class="path">~/.config/tmux/utility.conf</span>             <span class="cmt">lazygit + claude popups</span>
+<span class="path">~/.gitconfig</span>                            <span class="cmt">identity switching + aliases</span>
+<span class="path">~/.config/git/delta.gitconfig</span>           <span class="cmt">diff colours</span>
+<span class="path">~/.config/lazygit/config.yml</span>            <span class="cmt">commitizen binding</span>
+
+<span class="cmt">── escape hatches ─────────────────────────────────────</span>
+<span class="path">~/dotfiles-backup/</span>                      <span class="cmt"><span class="hl">everything as it was before this migration</span></span>
+<span class="path">~/.config/nvim.bak/</span>                     <span class="cmt">your hand-built 26-plugin config</span>
+<span class="path">~/.tmux.conf.pre-migration</span>              <span class="cmt">your old tmux config</span>
+<span class="path">~/.gitconfig.pre-migration</span>              <span class="cmt">your old gitconfig</span>
+<span class="path">~/.zshrc</span>                                <span class="cmt">untouched — chsh -s /bin/zsh to go back</span>
+  </div>
+</section>
+
+<footer>
+  <span>Adapted from an <a href="https://github.com/craftzdog/dotfiles">upstream dotfiles repo</a>, corrected where it had drifted from current LazyVim.</span>
+  <span>Migrated 30 Aug 2026</span>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var clear = document.getElementById('clear');
+  var countEl = document.getElementById('count');
+  var emptyEl = document.getElementById('empty');
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section'));
+  var rows = Array.prototype.slice.call(document.querySelectorAll('.tbl tr'));
+
+  // cache searchable text once
+  rows.forEach(function (r) {
+    r._hay = r.textContent.toLowerCase().replace(/\s+/g, ' ');
+  });
+
+  var filter = 'all';
+
+  function apply() {
+    var term = q.value.trim().toLowerCase();
+    clear.hidden = term === '';
+    var shown = 0;
+
+    rows.forEach(function (r) {
+      var sec = r.closest('section');
+      var tool = sec.getAttribute('data-tool');
+      var inTool = filter === 'all' || tool === filter || tool === 'all';
+      var hit = term === '' || r._hay.indexOf(term) !== -1;
+      var vis = inTool && hit;
+      r.hidden = !vis;
+      if (vis) shown++;
+    });
+
+    sections.forEach(function (sec) {
+      var tool = sec.getAttribute('data-tool');
+      var inTool = filter === 'all' || tool === filter || tool === 'all';
+
+      // hide subheads whose following table has no visible rows
+      var heads = Array.prototype.slice.call(sec.querySelectorAll('h3'));
+      heads.forEach(function (h) {
+        var n = h.nextElementSibling, live = false;
+        while (n && n.tagName !== 'H3') {
+          if (n.tagName === 'TABLE' &&
+              n.querySelector('tr:not([hidden])')) { live = true; break; }
+          n = n.nextElementSibling;
+        }
+        h.hidden = !live;
+      });
+
+      var hasRows = !!sec.querySelector('.tbl tr:not([hidden])');
+      var isFileMap = !!sec.querySelector('.filemap');
+      // the file map has no rows; show it only with no active search
+      sec.hidden = !inTool || (isFileMap ? term !== '' : !hasRows);
+    });
+
+    countEl.textContent = term || filter !== 'all'
+      ? shown + (shown === 1 ? ' binding' : ' bindings')
+      : rows.length + ' bindings';
+    emptyEl.hidden = shown !== 0;
+  }
+
+  q.addEventListener('input', apply);
+  clear.addEventListener('click', function () { q.value = ''; q.focus(); apply(); });
+
+  chips.forEach(function (c) {
+    c.addEventListener('click', function () {
+      filter = c.getAttribute('data-f');
+      chips.forEach(function (o) {
+        o.setAttribute('aria-pressed', String(o === c));
+      });
+      apply();
+    });
+  });
+
+  // `/` focuses search, the way it does in vim and less
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== q) {
+      e.preventDefault(); q.focus(); q.select();
+    } else if (e.key === 'Escape' && document.activeElement === q) {
+      q.value = ''; apply(); q.blur();
+    }
+  });
+
+  // theme toggle, respecting the three-state model
+  var btn = document.getElementById('theme');
+  btn.addEventListener('click', function () {
+    var cur = document.documentElement.getAttribute('data-theme');
+    var dark = cur ? cur === 'dark'
+      : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+    try { localStorage.setItem('atlas-theme', dark ? 'light' : 'dark'); } catch (e) {}
+  });
+  try {
+    var saved = localStorage.getItem('atlas-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch (e) {}
+
+  apply();
+})();
+</script>
