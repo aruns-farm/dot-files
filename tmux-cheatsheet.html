@@ -1,0 +1,323 @@
+<title>tmux Cheat Sheet</title>
+<style>
+  @page { size: A4 portrait; margin: 12mm 11mm 10mm; }
+
+  :root {
+    --ink:      #16242b;
+    --ink-soft: #5a6e77;
+    --rule:     #d5ddd9;
+    --rule-lt:  #e8edea;
+    --gold:     #8a6400;
+    --blue:     #1a6491;
+    --teal:     #17706c;
+    --rose:     #a32c5e;
+    --chip-bg:  #f4f1e6;
+    --chip-ln:  #ccc4ac;
+    --band:     #f7f5ee;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    color: var(--ink);
+    background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    font-size: 8.6pt;
+    line-height: 1.42;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Masthead ─────────────────────────────────── */
+  header {
+    border-bottom: 2.5pt solid var(--ink);
+    padding-bottom: 5pt;
+    margin-bottom: 9pt;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12pt;
+  }
+  h1 {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 19pt; font-weight: 700; margin: 0;
+    letter-spacing: -0.4pt;
+  }
+  h1 span { color: var(--gold); }
+  .sub {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 7.4pt; color: var(--ink-soft); text-align: right;
+    line-height: 1.5;
+  }
+  .sub b { color: var(--ink); }
+
+  /* ── The one thing to remember ────────────────── */
+  .prefix-band {
+    background: var(--band);
+    border: 0.8pt solid var(--rule);
+    border-left: 3pt solid var(--gold);
+    border-radius: 2pt;
+    padding: 6pt 9pt;
+    margin-bottom: 9pt;
+    display: flex; align-items: baseline; gap: 9pt; flex-wrap: wrap;
+  }
+  .prefix-band .lead {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 10pt; font-weight: 700;
+  }
+  .prefix-band .txt { font-size: 8.2pt; color: var(--ink-soft); }
+
+  /* ── Columns ──────────────────────────────────── */
+  .cols { column-count: 2; column-gap: 9mm; }
+
+  section {
+    break-inside: avoid;
+    margin-bottom: 8pt;
+  }
+  h2 {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 8pt; font-weight: 700;
+    letter-spacing: 0.7pt; text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 3pt;
+    padding-bottom: 2pt;
+    border-bottom: 0.8pt solid var(--rule);
+  }
+  h2.alt  { color: var(--rose); }
+  h2.blue { color: var(--blue); }
+
+  table { width: 100%; border-collapse: collapse; }
+  tr { break-inside: avoid; }
+  td {
+    padding: 1.7pt 0;
+    vertical-align: baseline;
+    border-bottom: 0.4pt solid var(--rule-lt);
+  }
+  tr:last-child td { border-bottom: 0; }
+  td.k { white-space: nowrap; padding-right: 6pt; width: 1%; }
+  td.d { color: var(--ink); }
+  td.d em { color: var(--ink-soft); font-style: normal; }
+
+  kbd {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 7.6pt; font-weight: 600;
+    background: var(--chip-bg);
+    border: 0.6pt solid var(--chip-ln);
+    border-radius: 2pt;
+    padding: 0.5pt 3.2pt;
+    white-space: nowrap;
+  }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 7.7pt;
+    color: var(--blue);
+  }
+  .p {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 7.2pt; color: var(--gold); font-weight: 700;
+    margin-right: 1.5pt;
+  }
+
+  .note {
+    font-size: 7.6pt; color: var(--ink-soft);
+    background: var(--band);
+    border-left: 2pt solid var(--rule);
+    padding: 3.5pt 6pt;
+    margin-top: 3pt;
+    break-inside: avoid;
+  }
+  .note b { color: var(--ink); }
+
+  footer {
+    margin-top: 7pt; padding-top: 4pt;
+    border-top: 0.8pt solid var(--rule);
+    font-size: 7pt; color: var(--ink-soft);
+    display: flex; justify-content: space-between;
+  }
+</style>
+
+<header>
+  <h1>tmux <span>cheat sheet</span></h1>
+  <div class="sub">
+    prefix <b>Ctrl+t</b> &nbsp;·&nbsp; tmux 3.6a<br>
+    ~/.config/tmux/tmux.conf
+  </div>
+</header>
+
+<div class="prefix-band">
+  <span class="lead">Ctrl + t</span>
+  <span class="txt">
+    is the <b>prefix</b>. Press it, <b>release</b>, then the key. Everything marked
+    <span class="p">⌃t</span> below needs it first. Keys without that marker work directly.
+  </span>
+</div>
+
+<div class="cols">
+
+<!-- ══════════ SESSIONS ══════════ -->
+<section>
+  <h2>Sessions — from the shell</h2>
+  <table>
+    <tr><td class="k"><code>tmux</code></td><td class="d">Start a new unnamed session</td></tr>
+    <tr><td class="k"><code>tmux new -s work</code></td><td class="d">New session named <em>work</em></td></tr>
+    <tr><td class="k"><code>tmux new -s work -c ~/dev</code></td><td class="d">…starting in a directory</td></tr>
+    <tr><td class="k"><code>tmux ls</code></td><td class="d">List all sessions</td></tr>
+    <tr><td class="k"><code>tmux a</code></td><td class="d">Attach to the most recent</td></tr>
+    <tr><td class="k"><code>tmux a -t work</code></td><td class="d">Attach to a named session</td></tr>
+    <tr><td class="k"><code>tmux kill-session -t work</code></td><td class="d">Kill one session</td></tr>
+    <tr><td class="k"><code>tmux kill-server</code></td><td class="d"><b>Kill everything</b> — the fix when a config change seems ignored</td></tr>
+  </table>
+  <div class="note">
+    <b>Your <code>t</code> shortcut:</b> <code>t</code> alone fzf-picks a session ·
+    <code>t office</code> attaches or creates it in the right directory ·
+    unknown names resolve through zoxide.<br>
+    <b>These are shell commands — run them from a normal terminal.</b> Inside tmux,
+    <code>tmux new -s x</code> fails with <em>"sessions should be nested with care"</em>.
+    See the next block for creating one from inside.
+  </div>
+</section>
+
+<!-- ══════════ SESSIONS INSIDE ══════════ -->
+<section>
+  <h2>Sessions — from inside</h2>
+  <table>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>:</kbd> <code>new -s api</code></td><td class="d"><b>Create a new session</b> and switch to it — the command prompt runs inside the server, so no nesting error</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>:</kbd> <code>new -s api -c ~/dev</code></td><td class="d">…starting in a directory</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>d</kbd></td><td class="d"><b>Detach</b> — leave it running <em>(also closes the Claude popup)</em></td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>s</kbd></td><td class="d">Visual session/window tree — pick and jump</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>$</kbd></td><td class="d">Rename this session</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>(</kbd> <kbd>)</kbd></td><td class="d">Previous / next session</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>D</kbd></td><td class="d">Choose a client to detach</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>:</kbd></td><td class="d">Command prompt — any tmux command</td></tr>
+  </table>
+  <div class="note">
+    Prefer the shell? Create detached, then switch — this works from inside:<br>
+    <code>tmux new-session -d -s api -c ~/dev/api &amp;&amp; tmux switch-client -t api</code>
+  </div>
+</section>
+
+<!-- ══════════ WINDOWS ══════════ -->
+<section>
+  <h2>Windows <em style="font-weight:400;color:var(--ink-soft)">(tabs)</em></h2>
+  <table>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>c</kbd></td><td class="d">New window, same directory</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>,</kbd></td><td class="d">Rename window</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>n</kbd> / <kbd>p</kbd></td><td class="d">Next / previous window</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>0</kbd>…<kbd>9</kbd></td><td class="d">Jump to window by number</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>w</kbd></td><td class="d">Choose window from a tree</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>f</kbd></td><td class="d"><b>Find window</b> by name</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>&amp;</kbd></td><td class="d">Kill window <em>(asks first)</em></td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>&lt;</kbd> / <kbd>&gt;</kbd></td><td class="d">Move this window left / right</td></tr>
+    <tr><td class="k"><kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>←</kbd> / <kbd>→</kbd></td><td class="d">Move window <em>— no prefix needed</em></td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>.</kbd></td><td class="d">Move window to another index</td></tr>
+  </table>
+</section>
+
+<!-- ══════════ PANES ══════════ -->
+<section>
+  <h2>Panes <em style="font-weight:400;color:var(--ink-soft)">(splits)</em></h2>
+  <table>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>|</kbd></td><td class="d">Split <b>vertical</b> — new pane to the right</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>-</kbd></td><td class="d">Split <b>horizontal</b> — new pane below</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>\</kbd> / <kbd>_</kbd></td><td class="d">Split full-width / full-height</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd></td><td class="d">Move left / down / up / right</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>←↓↑→</kbd></td><td class="d">Same, with arrows</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>H</kbd><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd></td><td class="d">Resize by 5 <em>(hold for repeat)</em></td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>z</kbd></td><td class="d"><b>Zoom</b> pane fullscreen — again to restore</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>;</kbd></td><td class="d">Last pane <em>(toggle back and forth)</em></td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>q</kbd></td><td class="d">Show pane numbers — press one to jump</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>x</kbd></td><td class="d">Kill this pane <em>(asks first)</em></td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>e</kbd></td><td class="d"><b>Kill all panes except this one</b></td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>!</kbd></td><td class="d">Break pane out into its own window</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>{</kbd> / <kbd>}</kbd></td><td class="d">Swap pane with previous / next</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>Space</kbd></td><td class="d">Cycle to the next layout</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>⌥</kbd><kbd>1</kbd>…<kbd>5</kbd></td><td class="d">Preset layouts <em>(even-h, even-v, main-h, main-v, tiled)</em></td></tr>
+  </table>
+</section>
+
+<!-- ══════════ POPUPS ══════════ -->
+<section>
+  <h2 class="alt">Popups — the custom ones</h2>
+  <table>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>g</kbd></td><td class="d"><b>lazygit</b> in an 80% popup. Close with <kbd>q</kbd>.</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>y</kbd></td><td class="d"><b>Claude Code</b> in a popup — one persistent session per directory. Close with <span class="p">⌃t</span><kbd>d</kbd>.</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>o</kbd></td><td class="d">Open current directory in Finder</td></tr>
+  </table>
+  <div class="note">
+    Two different exits: lazygit runs <b>directly</b> in the popup, so <kbd>q</kbd> quits it.
+    Claude runs in a <b>nested session</b>, so you <b>detach</b> with <span class="p">⌃t</span><kbd>d</kbd>
+    and the conversation keeps running.
+  </div>
+</section>
+
+<!-- ══════════ COPY MODE ══════════ -->
+<section>
+  <h2 class="blue">Copy mode — scrolling &amp; selecting</h2>
+  <table>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>[</kbd></td><td class="d"><b>Enter copy mode</b> — now you can scroll</td></tr>
+    <tr><td class="k"><kbd>Space</kbd></td><td class="d">Start selection</td></tr>
+    <tr><td class="k"><kbd>Enter</kbd></td><td class="d">Copy selection and exit</td></tr>
+    <tr><td class="k"><kbd>v</kbd></td><td class="d">Toggle <b>rectangle</b> (block) selection</td></tr>
+    <tr><td class="k"><kbd>/</kbd> / <kbd>?</kbd></td><td class="d">Search down / up</td></tr>
+    <tr><td class="k"><kbd>n</kbd> / <kbd>N</kbd></td><td class="d">Next / previous match</td></tr>
+    <tr><td class="k"><kbd>g</kbd> / <kbd>G</kbd></td><td class="d">Top / bottom of history</td></tr>
+    <tr><td class="k"><kbd>H</kbd> / <kbd>L</kbd></td><td class="d">Top / bottom of screen</td></tr>
+    <tr><td class="k"><kbd>q</kbd></td><td class="d">Leave copy mode</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>]</kbd></td><td class="d">Paste the buffer</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>=</kbd></td><td class="d">Choose from all paste buffers</td></tr>
+  </table>
+  <div class="note">
+    <b>Note:</b> <kbd>v</kbd> is <em>rectangle-toggle</em> here, not begin-selection — this
+    config uses tmux's vi defaults. Selection is <kbd>Space</kbd>, copy is <kbd>Enter</kbd>.
+  </div>
+</section>
+
+<!-- ══════════ SESSIONS SAVE ══════════ -->
+<section>
+  <h2>Saving &amp; restoring</h2>
+  <table>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>Ctrl</kbd><kbd>s</kbd></td><td class="d">Save all sessions now</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>Ctrl</kbd><kbd>r</kbd></td><td class="d"><b>Restore saved sessions</b></td></tr>
+  </table>
+  <div class="note">
+    Auto-save runs every <b>15 min</b>. Auto-<em>restore</em> is <b>off</b> — it could fail
+    partway at startup and drop you out of tmux entirely. Restore by hand after starting tmux.
+    Saves live in <code>~/.local/share/tmux/resurrect/</code>.
+  </div>
+</section>
+
+<!-- ══════════ MISC ══════════ -->
+<section>
+  <h2>Config &amp; plugins</h2>
+  <table>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>r</kbd></td><td class="d">Reload config</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>?</kbd></td><td class="d">List every binding</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>I</kbd></td><td class="d">Install plugins <em>(tpm)</em></td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>U</kbd></td><td class="d">Update plugins</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>⌥</kbd><kbd>u</kbd></td><td class="d">Remove unused plugins</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>t</kbd></td><td class="d">Clock</td></tr>
+    <tr><td class="k"><span class="p">⌃t</span><kbd>~</kbd></td><td class="d">Show tmux messages <em>(useful when something failed)</em></td></tr>
+  </table>
+</section>
+
+<!-- ══════════ RECIPES ══════════ -->
+<section>
+  <h2 class="alt">Common recipes</h2>
+  <table>
+    <tr><td class="k">Start a project</td><td class="d"><code>t kiosk</code> from a normal shell — attaches or creates it</td></tr>
+    <tr><td class="k">New session, already in tmux</td><td class="d"><span class="p">⌃t</span><kbd>:</kbd> then <code>new -s name</code></td></tr>
+    <tr><td class="k">Editor + terminal</td><td class="d"><code>nvim</code>, then <span class="p">⌃t</span><kbd>|</kbd>, then <span class="p">⌃t</span><kbd>h</kbd> to go back</td></tr>
+    <tr><td class="k">Read long output</td><td class="d"><span class="p">⌃t</span><kbd>z</kbd> to zoom, <span class="p">⌃t</span><kbd>[</kbd> to scroll</td></tr>
+    <tr><td class="k">Quick git</td><td class="d"><span class="p">⌃t</span><kbd>g</kbd> → do the work → <kbd>q</kbd></td></tr>
+    <tr><td class="k">Dev server</td><td class="d">Own pane, not nvim's terminal — it survives closing the editor</td></tr>
+    <tr><td class="k">Leave for the day</td><td class="d"><span class="p">⌃t</span><kbd>d</kbd> — everything keeps running</td></tr>
+    <tr><td class="k">Something's stuck</td><td class="d"><code>tmux kill-server</code>, then <span class="p">⌃t</span><kbd>Ctrl</kbd><kbd>r</kbd> to restore</td></tr>
+  </table>
+</section>
+
+</div>
+
+<footer>
+  <span>~/.config/tmux/ — tmux.conf · theme.conf · statusline.conf · utility.conf · macos.conf</span>
+  <span>plugins: tpm · pain-control · resurrect · continuum</span>
+</footer>

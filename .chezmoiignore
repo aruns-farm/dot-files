@@ -12,6 +12,8 @@ Brewfile
 # Docs
 README.md
 keymap-atlas.html
+tmux-cheatsheet.html
+tmux-cheatsheet.pdf
 
 # macOS junk
 .DS_Store
