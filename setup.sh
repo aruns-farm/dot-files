@@ -374,6 +374,26 @@ EOF
   fi
 fi
 
+# ── Install TPM + tmux plugins ───────────────────────────────
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [[ ! -d "$TPM_DIR" ]]; then
+  info "Installing TPM (Tmux Plugin Manager)..."
+  git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+  success "TPM installed"
+else
+  success "TPM already installed — skipping"
+fi
+
+mkdir -p "$HOME/.tmux/plugins"
+for plugin in tmux-sensible tmux-resurrect tmux-continuum; do
+  pdir="$HOME/.tmux/plugins/$plugin"
+  if [[ ! -d "$pdir" ]]; then
+    info "Installing $plugin..."
+    git clone "https://github.com/tmux-plugins/$plugin" "$pdir"
+  fi
+done
+success "Tmux plugins installed"
+
 # ══════════════════════════════════════════════════════════════
 # STEP 8 — Git Config (interactive, per-context emails)
 # ══════════════════════════════════════════════════════════════

@@ -16,7 +16,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # ── Homebrew (Apple Silicon) ─────────────────────────────────
-eval "$(/opt/homebrew/bin/brew shellenv)"
+[ -n "$HOMEBREW_PREFIX" ] || eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # ── NVM ──────────────────────────────────────────────────────
 export NVM_DIR="$HOME/.nvm"
@@ -133,6 +133,10 @@ alias personal="cd ~/Documents/personal"
 alias professional="cd ~/Documents/professional"
 alias dev="cd ~/dev"
 
+# ── AeroSpace Cycle ──────────────────────────────────────────
+alias cycle-start="~/Documents/dot-files/aerospace-cycle-ctl.sh start"
+alias cycle-stop="~/Documents/dot-files/aerospace-cycle-ctl.sh stop"
+
 # ── Misc ─────────────────────────────────────────────────────
 alias reload="source ~/.zshrc"
 alias zshconfig="nvim ~/.zshrc"
@@ -147,7 +151,8 @@ bwunlock() {
 }
 
 # ── PATH ─────────────────────────────────────────────────────
-export PATH="/opt/homebrew/bin:$PATH"
+# NOTE: don't prepend /opt/homebrew/bin here — brew shellenv (above) already
+# adds it, and re-prepending it puts Homebrew's node ahead of nvm's.
 export PATH="$HOME/.local/bin:$PATH"
 
 # ── Editor ───────────────────────────────────────────────────
@@ -162,5 +167,69 @@ setopt HIST_IGNORE_DUPS
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_SPACE
 
+# ── Tmux Session Manager ─────────────────────────────────────
+# Usage: t [name] [dir]
+#   t             — list sessions with fzf, attach on select
+#   t office      — attach to "office" session (or create in ~/dev/office)
+#   t myproject   — create session in matching dir via zoxide
+t() {
+  local name="${1:-}"
+
+  if [[ -z "$name" ]]; then
+    local sessions
+    sessions=$(tmux list-sessions -F '#S' 2>/dev/null)
+    if [[ -z "$sessions" ]]; then
+      echo "No active sessions. Usage: t <name> [dir]"
+      return
+    fi
+    name=$(echo "$sessions" | fzf --prompt="Session: " --height=10)
+    [[ -z "$name" ]] && return
+    tmux attach-session -t "$name"
+    return
+  fi
+
+  if tmux has-session -t "$name" 2>/dev/null; then
+    tmux attach-session -t "$name"
+    return
+  fi
+
+  local dir="${2:-}"
+  if [[ -z "$dir" ]]; then
+    case "$name" in
+      office)       dir="$HOME/dev/office" ;;
+      personal)     dir="$HOME/dev/personal" ;;
+      professional) dir="$HOME/dev/professional" ;;
+      sandbox)      dir="$HOME/dev/sandbox" ;;
+      dotfiles|dot) dir="$HOME/Documents/dot-files" ;;
+      *)            dir=$(zoxide query "$name" 2>/dev/null || echo "$HOME") ;;
+    esac
+  fi
+
+  [[ ! -d "$dir" ]] && dir="$HOME"
+  tmux new-session -d -s "$name" -c "$dir"
+  tmux attach-session -t "$name"
+}
+
+_t_complete() { compadd $(tmux list-sessions -F '#S' 2>/dev/null); }
+compdef _t_complete t
+
 # ── Bitwarden SSH Agent ───────────────────────────────────────
 export SSH_AUTH_SOCK="$HOME/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+
+# Android / Java toolchain (added for your-farm mobile builds)
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/farm/.lmstudio/bin"
+# End of LM Studio CLI section
+
+
+# ── PATH hygiene (keep this last) ────────────────────────────
+typeset -U path  # dedupe: tmux login shells + re-sourcing stack duplicates
+# nvm swaps its dir in PATH *in place*, and its "is a system bin ahead of me?"
+# check only knows /bin, /usr/bin, /usr/local/bin — not /opt/homebrew/bin. So
+# once brew's node gets ahead, `nvm use` reports success and changes nothing.
+[[ -d $NVM_BIN ]] && path=($NVM_BIN ${path:#$NVM_BIN})

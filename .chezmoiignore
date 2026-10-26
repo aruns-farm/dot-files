@@ -5,6 +5,8 @@ folder-structure.sh
 enable-bitwarden-ssh-agent.sh
 save-ssh-to-bitwarden.sh
 ssh-config.example
+aerospace-cycle*.sh
+mouse-jiggle.swift
 
 # Package list — used by setup.sh, not a dotfile
 Brewfile

@@ -4,8 +4,8 @@
 
 after-startup-command = [
   'exec-and-forget open -a "Google Chrome"',
-  'exec-and-forget open -a "Cursor"',
-  'exec-and-forget open -a "iterm2"',
+  'exec-and-forget open -a "Visual Studio Code"',
+  'exec-and-forget open -a "Ghostty"',
   'exec-and-forget open -a "Slack"',
   'exec-and-forget open -a "Spotify"',
 ]
@@ -52,6 +52,9 @@ alt-equal      = 'resize smart +50'
 
 alt-shift-space = 'layout floating tiling'
 alt-f           = 'fullscreen'
+
+alt-c       = 'exec-and-forget ~/Documents/dot-files/aerospace-cycle-ctl.sh start'
+alt-shift-c = 'exec-and-forget ~/Documents/dot-files/aerospace-cycle-ctl.sh stop'
 
 [mode.service.binding]
 esc       = 'mode main'
